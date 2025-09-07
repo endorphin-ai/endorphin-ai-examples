@@ -1,9 +1,10 @@
 import { request } from '@playwright/test';
-import { API_URL } from '../envirement';
+import { BASE_URL } from '../envirement';
 
 export const apiContext = async () => {
+	console.log('Creating API context with baseURL:', BASE_URL);
 	return await request.newContext({
-		baseURL: API_URL,
+		baseURL: BASE_URL,
 		extraHTTPHeaders: {
 			'Content-Type': 'application/json; charset=utf-8',
 		},
