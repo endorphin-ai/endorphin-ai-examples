@@ -7,10 +7,16 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  BASE_URL: https://qafromla.herokuapp.com/
+
 jobs:
   test-openai:
     name: Endorphin AI Tests - Open AI
     runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      HEADLESS: true
 
     steps:
     - name: Checkout code
@@ -32,9 +38,6 @@ jobs:
       run: npx playwright install chromium
 
     - name: Run Endorphin AI tests (OpenAI)
-      env:
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        HEADLESS: true
       run: |
         npx endorphin-ai run test all
 
