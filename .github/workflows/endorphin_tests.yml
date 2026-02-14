@@ -1,0 +1,144 @@
+name: Endorphin AI Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  BASE_URL: ${{ vars.BASE_URL }}
+
+jobs:
+  test-openai:
+    name: Endorphin AI Tests - Open AI
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      HEADLESS: true
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Update Endorphin AI to latest
+      run: npm install endorphin-ai@latest
+
+    - name: Install Playwright browsers
+      run: npx playwright install chromium
+
+    - name: Run Endorphin AI tests (OpenAI)
+      run: |
+        npx endorphin-ai run test all
+
+    - name: Generate test report
+      if: always()
+      run: npx endorphin-ai generate report
+
+    - name: Publish Test Summary
+      if: always()
+      run: |
+        if [ -f "test-results/report.md" ]; then
+          cat test-results/report.md >> $GITHUB_STEP_SUMMARY
+        elif [ -f "endorphin-report/report.md" ]; then
+          cat endorphin-report/report.md >> $GITHUB_STEP_SUMMARY
+        else
+          echo "## Endorphin AI Test Report" >> $GITHUB_STEP_SUMMARY
+          echo "Report file not found. Check artifacts." >> $GITHUB_STEP_SUMMARY
+        fi
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: endorphin-test-results-openai
+        path: |
+          test-results/
+          endorphin-report/
+          !test-results/**/*.png
+        retention-days: 30
+
+    - name: Upload screenshots
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: endorphin-screenshots-openai
+        path: test-results/**/*.png
+        retention-days: 7
+
+  test-google:
+    name: Endorphin AI Tests - Google
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+      OPENAI_BASE_URL: https://generativelanguage.googleapis.com/v1beta/openai/
+      ENDORPHIN_MODEL: gemini-1.5-flash
+      HEADLESS: true
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Update Endorphin AI to latest
+      run: npm install endorphin-ai@latest
+
+    - name: Install Playwright browsers
+      run: npx playwright install chromium
+
+    - name: Run Endorphin AI tests (Google)
+      run: |
+        npx endorphin-ai run test all
+
+    - name: Generate test report
+      if: always()
+      run: npx endorphin-ai generate report
+
+    - name: Publish Test Summary
+      if: always()
+      run: |
+        if [ -f "test-results/report.md" ]; then
+          cat test-results/report.md >> $GITHUB_STEP_SUMMARY
+        elif [ -f "endorphin-report/report.md" ]; then
+          cat endorphin-report/report.md >> $GITHUB_STEP_SUMMARY
+        else
+          echo "## Endorphin AI Test Report" >> $GITHUB_STEP_SUMMARY
+          echo "Report file not found. Check artifacts." >> $GITHUB_STEP_SUMMARY
+        fi
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: endorphin-test-results-google
+        path: |
+          test-results/
+          endorphin-report/
+          !test-results/**/*.png
+        retention-days: 30
+
+    - name: Upload screenshots
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: endorphin-screenshots-google
+        path: test-results/**/*.png
+        retention-days: 7

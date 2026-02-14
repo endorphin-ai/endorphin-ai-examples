@@ -4,7 +4,7 @@ import 'dotenv/config';
 // Environment configuration
 export const environment = {
 	// Base URL for the application
-	baseUrl: process.env.BASE_URL,
+	baseUrl: process.env.BASE_URL || 'https://qafromla.herokuapp.com/',
 } as const;
 
 // Export individual values for convenience
