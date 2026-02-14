@@ -1,3 +1,3 @@
 # endorphin-ai-examples
 
-E2E tests for https://qafromla.herokuapp.com/
+E2E AI Tests for https://qafromla.herokuapp.com/
