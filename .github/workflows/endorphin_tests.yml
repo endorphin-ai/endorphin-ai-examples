@@ -76,6 +76,11 @@ jobs:
   test-google:
     name: Endorphin AI Tests - Google
     runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+      OPENAI_BASE_URL: https://generativelanguage.googleapis.com/v1beta/openai/
+      ENDORPHIN_MODEL: gemini-1.5-flash
+      HEADLESS: true
 
     steps:
     - name: Checkout code
@@ -97,9 +102,6 @@ jobs:
       run: npx playwright install chromium
 
     - name: Run Endorphin AI tests (Google)
-      env:
-        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-        HEADLESS: true
       run: |
         npx endorphin-ai run test all
 
