@@ -23,7 +23,18 @@ export default {
 			recursionLimit: 10,
 			stopPhrases: ['test completed', 'task finished', 'done'],
 		},
+		vision: {
+			enabled: true,
+			mode: 'supplement',
+		},
 	},
+
+	// AI Configuration — Google Gemini
+	// ai: {
+	// 	model: 'gemini-2.0-flash',
+	// 	temperature: 0.1,
+	// 	maxRetries: 3,
+	// },
 
 	// Custom token pricing configuration (optional)
 	// Uncomment and customize if you have special pricing
