@@ -7,6 +7,7 @@ node_modules/
 # Test results
 test-results/
 test-recorder/
+.endorphin-tmp/
 
 # Logs
 *.log

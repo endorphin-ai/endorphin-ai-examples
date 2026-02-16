@@ -10,9 +10,6 @@ export const QALA_1: TestCase = {
 	priority: 'High',
 	tags: ['health', 'smoke'],
 
-	data: async () => {
-		return {};
-	},
 	task: `STEP 1: Navigate to ${BASE_URL},
          STEP 2: Verify that text "A place to share your knowledge." is visible`,
 };
